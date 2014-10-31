@@ -1,16 +1,22 @@
-var level = require('level-prebuilt')
-var RestModels = require('level-restful')
-var bytewise = require('bytewise/hex')
-var util = require('util')
-var debug = require('debug')('models')
-var timestamp = require('monotonic-timestamp')
+var level = require('level-prebuilt'),
+    RestModels = require('level-restful'),
+    bytewise = require('bytewise/hex'),
+    util = require('util'),
+    debug = require('debug')('models'),
+    timestamp = require('monotonic-timestamp'),
+    levelQuery = require('level-queryengine'),
+    fulltextEngine = require('fulltext-engine');
 
-var defaults = require('./defaults.js')
-var Users = require('./auth/users.js')
+var defaults = require('./defaults.js'),
+    Users = require('./auth/users.js');
 
 module.exports = function(opts) {
-  var db = level(opts.DAT_REGISTRY_DB,
-    { keyEncoding: bytewise, valueEncoding: 'json' })
+  var db = levelQuery(level(opts.DAT_REGISTRY_DB,
+    { keyEncoding: bytewise, valueEncoding: 'json' }))
+
+  db.query.use(fulltextEngine())
+
+  db.ensureIndex('name', 'fulltext', fulltextEngine.index());
 
   return {
     db: db,

@@ -7,7 +7,8 @@ var jsonBody = require("body")
 var debug = require('debug')('server')
 require('string.prototype.startswith')
 
-var auth = require('./auth/index.js')
+var Auth = require('./auth')
+var Search = require('./search')
 var defaults = require('./defaults.js')
 var createModels = require('./models.js')
 
@@ -41,10 +42,12 @@ Server.prototype.createRoutes = function() {
     }
   })
 
+  var search = Search(this.models)
   router.addRoute('/', this.index)
+  router.addRoute('/search', search.index)
 
   // Authentication
-  var provider = auth(this.models)
+  var provider = Auth(this.models)
   router.addRoute('/auth/login/', provider.login)
   router.addRoute('/auth/callback', provider.callback)
   router.addRoute('/auth/logout/', provider.logout)
@@ -58,6 +61,10 @@ Server.prototype.createRoutes = function() {
   })
 
   return router
+}
+
+Server.prototype.index = function(req, res) {
+  res.end(fs.readFileSync('./index.html').toString())
 }
 
 Server.prototype.index = function(req, res) {
