@@ -42,7 +42,7 @@ module.exports = function() {
   common.getRegistry = function (t, cb) {
 
     var dbPath = defaults.DAT_REGISTRY_DB
-    rimraf.sync(dbPath);
+    //rimraf.sync(dbPath);
 
     var api = Server()
     var port = api.options.PORT
