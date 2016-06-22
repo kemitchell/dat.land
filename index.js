@@ -13,23 +13,16 @@ var explorer = require('hyperdrive-ui')
 var $hyperdrive = document.querySelector('#hyperdrive-ui')
 var $shareLink = document.getElementById('share-link')
 
+var store = require('./store')
+
 var componentCtors = require('./components')
 var components = [
   componentCtors.Help('help'),
-  componentCtors.HyperdriveSize('hyperdrive-size'),
-  componentCtors.Peers('peers'),
+  componentCtors.HyperdriveSize('hyperdrive-size', store),
+  componentCtors.Peers('peers', store),
   componentCtors.ResetButton('new', main),
   componentCtors.SpeedDisplay('speed')
 ]
-
-var store = require('./store')
-store.subscribe(function (state) {
-  for (var c in components) {
-    if (components[c].update) {
-      components[c].update(state)
-    }
-  }
-})
 
 var keypath = window.location.hash.substr(1).match('([^/]+)(/?.*)')
 var key = keypath ? keypath[1] : null

@@ -3,11 +3,17 @@ var prettyBytes = require('pretty-bytes')
 
 module.exports = HyperdriveSize
 
-function HyperdriveSize (el) {
-  if (!(this instanceof HyperdriveSize)) return new HyperdriveSize(el)
+function HyperdriveSize (el, store) {
+  if (!(this instanceof HyperdriveSize)) return new HyperdriveSize(el, store)
+  var self = this
   this.$el = document.getElementById(el)
   this._component = this._render()
   this._size = 0
+  this._store = store
+  this._store.subscribe(function (state) {
+    debugger
+    self.update(state)
+  })
 
   if (this.$el) this.$el.appendChild(this._component)
 }
