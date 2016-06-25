@@ -19,7 +19,8 @@ var components = [
   componentCtors.HyperdriveSize('hyperdrive-size'),
   componentCtors.Peers('peers'),
   componentCtors.ResetButton('new', main),
-  componentCtors.SpeedDisplay('speed')
+  componentCtors.SpeedDisplay('speed'),
+  componentCtors.DownloadButton('download')
 ]
 
 var store = require('./store')
