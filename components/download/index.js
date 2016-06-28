@@ -33,19 +33,23 @@ DownloadButton.prototype._render = function () {
       entry.mtime = new Date(entry.mtime)
       entry.ctime = new Date(entry.ctime)
       entry.size = entry.length
+      var readStream = archive.createFileReadStream(entry)
+      var writeStream = pack.entry(entry, function () {
+        console.log('write stream end')
+      })
       entry.name = path.relative('/', entry.name)
-      var writeStream = pack.entry(entry, next)
-      var content = archive.createFileReadStream(entry)
       console.log('writing', entry)
-      pump(content, writeStream, function (err) {
-        if (err) throw err
-        console.log('done pumping')
+      console.log('write stream', writeStream)
+      pump(readStream, writeStream, function () {
+        console.log('pump done')
+        pack.finalize()
+        next()
       })
     })
 
     pump(archive.list(), tarFiles, function (err) {
       if (err) throw err
-      pack.finalize()
+      console.log('done')
     })
   }
 

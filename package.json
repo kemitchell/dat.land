@@ -51,5 +51,9 @@
   },
   "bugs": {
     "url": "https://github.com/karissa/hyperdrive-ui/issues"
+  },
+  "dependencies": {
+    "pump": "^1.0.1",
+    "zip-stream": "^1.0.0"
   }
 }
